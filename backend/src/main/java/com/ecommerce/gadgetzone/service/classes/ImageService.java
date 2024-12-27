@@ -1,8 +1,10 @@
-package com.ecommerce.gadgetzone.service;
+package com.ecommerce.gadgetzone.service.classes;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ecommerce.gadgetzone.service.interfaces.IImageService;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -11,7 +13,7 @@ import java.io.IOException;
 
 @Service
 @AllArgsConstructor
-public class ImageService {
+public class ImageService implements IImageService{
 
     public String saveImage(File path, MultipartFile profileImage, String imageName) throws IOException {
 
