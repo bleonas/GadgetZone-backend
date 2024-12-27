@@ -1,6 +1,7 @@
 package com.ecommerce.gadgetzone.entity;
 
 
+import com.ecommerce.gadgetzone.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,8 @@ public class Payment {
     private String method;
 
     @Column(name = "statusi")
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne

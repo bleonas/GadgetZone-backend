@@ -1,6 +1,7 @@
 package com.ecommerce.gadgetzone.entity;
 
 
+import com.ecommerce.gadgetzone.enums.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,8 @@ public class Product {
     private Date date;
 
     @Column(name = "statusi")
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
@@ -112,11 +114,11 @@ public class Product {
         this.date = date;
     }
 
-    public Integer getStatus() {
+    public ProductStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(ProductStatus status) {
         this.status = status;
     }
 

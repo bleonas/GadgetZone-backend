@@ -30,7 +30,7 @@ public class ShoppingCart {
     private int sessionId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "shporta", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "shoppingCart", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ShoppingCartDetails> shoppingCartDetails;
 
     public int getShoppingCartId() {
