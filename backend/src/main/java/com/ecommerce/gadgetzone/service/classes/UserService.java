@@ -7,14 +7,21 @@ import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
 import com.ecommerce.gadgetzone.entity.User; 
 import com.ecommerce.gadgetzone.repository.UserRepository; 
 import com.ecommerce.gadgetzone.service.interfaces.IUserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.ecommerce.gadgetzone.enums.Role;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,9 +73,37 @@ public class UserService implements IUserService{
         return new UserLogInResponse(user.getEmail(), user.getRole().name(), jwtToken);
     }
 
-    
+    public User getAuthenticatedUser() {
+        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(authenticatedUserEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserLogInResponse getAuthenticatedUserResponse(String token) {
+        User authenticatedUser = getAuthenticatedUser();
+
+        String role = authenticatedUser.getRole().name();
+
+        UserLogInResponse userProfileResponse = new UserLogInResponse(
+                authenticatedUser.getEmail(),
+                role,
+                token 
+        );
+        return userProfileResponse;
+    }
 
 
+    public void logout(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid or missing Authorization header");
+        }
+
+        String token = authorizationHeader.substring(7);
+
+        jwtService.addToBlacklist(token);
+    }
 }
 
 

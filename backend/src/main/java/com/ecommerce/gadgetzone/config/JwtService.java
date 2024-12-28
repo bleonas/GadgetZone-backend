@@ -17,6 +17,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 @Service
@@ -25,6 +27,7 @@ public class JwtService {
 
     private static final String SECRET_KEY = "3a7f6b2d9e8c5f12471036a9b8c2e1f738d4a6b5c9e7f0d325e8a1c7f6b2d9e";
     private final UserDetailsService userDetailsService;
+    private final Set<String> blacklistedTokens = ConcurrentHashMap.newKeySet();
 
     public String extractUsername(String token){
         return extractClaim(token , Claims::getSubject);
@@ -40,10 +43,10 @@ public class JwtService {
     }
 
     boolean isTokenExpired(String token) {
-        return extractExpriation(token).before(new Date());
+        return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpriation(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
@@ -91,4 +94,13 @@ public class JwtService {
         String username = extractUsername(token);
         return userDetailsService.loadUserByUsername(username);
     }
+
+     public void addToBlacklist(String token) {
+        blacklistedTokens.add(token);
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        return blacklistedTokens.contains(token);
+    }
+
 }

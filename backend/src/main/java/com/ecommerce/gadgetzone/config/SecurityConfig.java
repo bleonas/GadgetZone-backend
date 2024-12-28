@@ -38,7 +38,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,
                                 "/user/signup",
-                                "/user/login").permitAll()
+                                "/user/login", 
+                                "/user/logout").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/user/profile").permitAll()
                         .requestMatchers(
