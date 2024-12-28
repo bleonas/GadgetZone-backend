@@ -70,7 +70,7 @@ public class UserService implements IUserService{
 
         String jwtToken = jwtService.generateToken(user);
 
-        return new UserLogInResponse(user.getEmail(), user.getRole().name(), jwtToken);
+        return new UserLogInResponse(user.getEmail(), user.getUser_id(), user.getFirstName(), user.getLastName(), user.getRole().name(), jwtToken);
     }
 
     public User getAuthenticatedUser() {
@@ -86,6 +86,9 @@ public class UserService implements IUserService{
 
         UserLogInResponse userProfileResponse = new UserLogInResponse(
                 authenticatedUser.getEmail(),
+                authenticatedUser.getUser_id(),
+                authenticatedUser.getFirstName(),
+                authenticatedUser.getLastName(),
                 role,
                 token 
         );
