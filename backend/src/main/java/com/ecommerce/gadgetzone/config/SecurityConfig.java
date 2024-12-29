@@ -50,9 +50,13 @@ public class SecurityConfig {
                                 "/admin/brand",
                                 "/admin/category",
                                 "/admin/users",
-                                "admin/add-products/{productId}").permitAll()
+                                "admin/add-products/{productId}",
+                                "admin/products-list").permitAll()
                         .requestMatchers(HttpMethod.DELETE,
-                                "/admin/users/{userId}").permitAll()
+                                "/admin/users/{userId}",
+                                "admin/products-list/{productId}").permitAll()
+                        .requestMatchers(HttpMethod.PUT,
+                                "/admin/add-products/{productId}").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",

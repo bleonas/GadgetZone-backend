@@ -20,6 +20,7 @@ import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
 import com.ecommerce.gadgetzone.dto.response.ProductResponse;
+import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
 import com.ecommerce.gadgetzone.entity.Brand;
 import com.ecommerce.gadgetzone.entity.Category;
 import com.ecommerce.gadgetzone.entity.Product;
@@ -141,6 +142,44 @@ public class AdminService implements IAdminService{
 
     public Product getProductById(int productId) {
         return productRepository.findById(productId).orElse(null);
+    }
+
+    public void editProduct(int productId, ProductRequest productRequest) {
+        Product existingProduct = productRepository.findByProductId(productId)
+                .orElseThrow(() -> new IllegalStateException("Product not found"));
+    
+        existingProduct.setProductName(productRequest.getProductName());
+        existingProduct.setProductDescription(productRequest.getProductDescription());
+        existingProduct.setProductPicture(productRequest.getProductPicture());
+        existingProduct.setProductPrice(productRequest.getProductPrice());
+        existingProduct.setStatus(productRequest.getStatus());
+        existingProduct.setBrand(productRequest.getBrand());
+        existingProduct.setCategory(productRequest.getCategory());
+    
+        productRepository.save(existingProduct);
+    }
+
+        public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(product -> ProductResponse.builder()
+                    .productId(product.getProductId())
+                    .productName(product.getProductName())
+                    .productDescription(product.getProductDescription())
+                    .productPicture(product.getProductPicture())
+                    .productPrice(product.getProductPrice())
+                    .status(product.getStatus())
+                    .brand(product.getBrand())
+                    .category(product.getCategory())
+                    .build())
+
+                    .collect(Collectors.toList());
+    }
+
+    public void deleteProductById(int productId) {
+        Product product = productRepository.findByProductId(productId)
+                                  .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        productRepository.delete(product);
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
 import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
+import com.ecommerce.gadgetzone.dto.response.ProductResponse;
 import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
 import com.ecommerce.gadgetzone.entity.Brand;
 import com.ecommerce.gadgetzone.entity.Category;
@@ -121,4 +123,35 @@ public class AdminController {
         }
         return ResponseEntity.ok(product);
     }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @PutMapping("/add-products/{productId}")
+    public ResponseEntity<?> editProduct(@PathVariable("productId") int productId, @RequestBody ProductRequest productRequest) {
+        adminService.editProduct(productId, productRequest);
+        return ResponseEntity.ok("Product updated successfully");
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @GetMapping("/products-list")
+    public ResponseEntity<List<ProductResponse>> getProducts() {
+        try {
+            List<ProductResponse> products = adminService.getAllProducts();
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @DeleteMapping("/products-list/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("productId") int productId) {
+        try {
+            adminService.deleteProductById(productId);
+            return ResponseEntity.ok("Product deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error deleting product: " + e.getMessage());
+        }
+    }
+
+
 }

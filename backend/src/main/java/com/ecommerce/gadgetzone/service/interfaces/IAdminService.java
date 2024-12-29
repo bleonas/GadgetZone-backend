@@ -9,6 +9,7 @@ import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
 import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
+import com.ecommerce.gadgetzone.dto.response.ProductResponse;
 import com.ecommerce.gadgetzone.entity.Product;
 
 public interface IAdminService {
@@ -28,4 +29,10 @@ public interface IAdminService {
     void addProduct(ProductRequest addProductRequest);
     
     Product getProductById(int productId);
+
+    void editProduct(int productId, ProductRequest productRequest);
+
+    List<ProductResponse> getAllProducts();
+
+    void deleteProductById(int productId);
 }
