@@ -43,12 +43,14 @@ public class SecurityConfig {
                                 "/admin/create-admin",
                                 "/admin/brand",
                                 "/admin/category",
-                                "/admin/warehouse").permitAll()
+                                "/admin/warehouse",
+                                "/admin/add-product").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/user/profile",
                                 "/admin/brand",
                                 "/admin/category",
-                                "/admin/users").permitAll()
+                                "/admin/users",
+                                "admin/add-products/{productId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE,
                                 "/admin/users/{userId}").permitAll()
                         .requestMatchers(

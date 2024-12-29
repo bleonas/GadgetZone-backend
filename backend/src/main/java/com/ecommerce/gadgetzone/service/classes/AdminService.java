@@ -4,23 +4,31 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ecommerce.gadgetzone.dto.request.BrandRequest;
 import com.ecommerce.gadgetzone.dto.request.CategoryRequest;
+import com.ecommerce.gadgetzone.dto.request.ProductRequest;
 import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
 import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
+import com.ecommerce.gadgetzone.dto.response.ProductResponse;
 import com.ecommerce.gadgetzone.entity.Brand;
 import com.ecommerce.gadgetzone.entity.Category;
+import com.ecommerce.gadgetzone.entity.Product;
 import com.ecommerce.gadgetzone.entity.User;
 import com.ecommerce.gadgetzone.entity.Warehouse;
 import com.ecommerce.gadgetzone.enums.Role;
 import com.ecommerce.gadgetzone.repository.BrandRepository;
 import com.ecommerce.gadgetzone.repository.CategoryRepository;
+import com.ecommerce.gadgetzone.repository.ProductRepository;
 import com.ecommerce.gadgetzone.repository.UserRepository;
 import com.ecommerce.gadgetzone.repository.WarehouseRepository;
 import com.ecommerce.gadgetzone.service.interfaces.IAdminService;
@@ -33,17 +41,18 @@ import lombok.RequiredArgsConstructor;
 public class AdminService implements IAdminService{
 
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final WarehouseRepository warehouseRepository;
 
     public void registerAdmin(UserSignUpRequest userSignUpRequest) {
-    Optional<User> existingUser = userRepository.findByEmail(userSignUpRequest.getEmail());
-    if (existingUser.isPresent()) {
-        throw new IllegalStateException("Email already taken");
-    }
-    User admin = User.builder()
+        Optional<User> existingUser = userRepository.findByEmail(userSignUpRequest.getEmail());
+        if (existingUser.isPresent()) {
+            throw new IllegalStateException("Email already taken");
+        }
+        User admin = User.builder()
             .email(userSignUpRequest.getEmail())
             .password(passwordEncoder.encode(userSignUpRequest.getPassword())) 
             .firstName(userSignUpRequest.getFirstName())
@@ -96,6 +105,7 @@ public class AdminService implements IAdminService{
     public List<BrandResponse> getAllBrands() {
         return brandRepository.findAll().stream()
                 .map(brand -> BrandResponse.builder()
+                        .brandId(brand.getBrandId())
                         .brandName(brand.getNameBrand())
                         .build())
                 .collect(Collectors.toList()); 
@@ -104,9 +114,34 @@ public class AdminService implements IAdminService{
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(category -> CategoryResponse.builder()
+                        .categoryId(category.getCategoryId())
                         .categoryName(category.getCategoryName())
                         .build())
                 .collect(Collectors.toList()); 
     }
+
+    public void addProduct(ProductRequest addProductRequest) {
+        Optional<Product> existingProduct = productRepository.findByProductName(addProductRequest.getProductName());
+        if (existingProduct.isPresent()) {
+            throw new IllegalStateException("Product already exists");
+        }
+
+        Product newProduct = Product.builder()
+           .productName(addProductRequest.getProductName())
+           .productDescription(addProductRequest.getProductDescription())
+           .productPicture(addProductRequest.getProductPicture())
+           .productPrice(addProductRequest.getProductPrice())
+           .brand(addProductRequest.getBrand())
+           .category(addProductRequest.getCategory())
+           .status(addProductRequest.getStatus().AKTIV)
+           .build();
+
+        productRepository.save(newProduct);
+    }
+
+    public Product getProductById(int productId) {
+        return productRepository.findById(productId).orElse(null);
+    }
+
 
 }

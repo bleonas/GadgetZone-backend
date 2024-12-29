@@ -10,6 +10,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class BrandResponse {
+    private int brandId;
     private String brandName;
 
 }

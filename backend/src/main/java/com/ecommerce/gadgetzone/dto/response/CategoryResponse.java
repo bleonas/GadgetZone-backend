@@ -10,6 +10,8 @@ import lombok.ToString;
 @Builder
 @ToString
 public class CategoryResponse {
+    
+    private int categoryId;
     private String categoryName;
 
 }

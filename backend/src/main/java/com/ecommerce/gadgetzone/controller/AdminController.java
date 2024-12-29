@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.gadgetzone.config.JwtService;
 import com.ecommerce.gadgetzone.dto.request.BrandRequest;
 import com.ecommerce.gadgetzone.dto.request.CategoryRequest;
+import com.ecommerce.gadgetzone.dto.request.ProductRequest;
 import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
 import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
@@ -23,10 +24,12 @@ import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
 import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
 import com.ecommerce.gadgetzone.entity.Brand;
 import com.ecommerce.gadgetzone.entity.Category;
+import com.ecommerce.gadgetzone.entity.Product;
 import com.ecommerce.gadgetzone.entity.Warehouse;
 import com.ecommerce.gadgetzone.service.interfaces.IAdminService;
 import com.ecommerce.gadgetzone.service.interfaces.IUserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -102,4 +105,20 @@ public class AdminController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @PostMapping("/add-product")
+    public ResponseEntity<?> addProduct(@RequestBody ProductRequest addProductRequest) {
+        adminService.addProduct(addProductRequest);
+        return ResponseEntity.ok("Product Added Successfully");
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @GetMapping("/add-products/{productId}")
+    public ResponseEntity<?> getProductById(@PathVariable int productId) {
+        Product product = adminService.getProductById(productId);
+        if (product == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        }
+        return ResponseEntity.ok(product);
+    }
 }

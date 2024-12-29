@@ -5,6 +5,7 @@ import com.ecommerce.gadgetzone.enums.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @Table(name = "produkt")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class Product {
     @Id
     @Column(name = "produkt_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int produkt_id;
+    private int productId;
 
     @Column(name = "emri_produktit")
     private String productName;
@@ -32,7 +34,7 @@ public class Product {
     private String productDescription;
 
     @Column(name = "foto_produktit")
-    private String productPic;
+    private String productPicture;
 
     @Column(name = "cmimi_produktit")
     private double productPrice;
@@ -66,12 +68,12 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ShoppingCartDetails> shoppingCartDetails;
 
-    public int getProdukt_id() {
-        return produkt_id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProdukt_id(int produkt_id) {
-        this.produkt_id = produkt_id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -90,12 +92,12 @@ public class Product {
         this.productDescription = productDescription;
     }
 
-    public String getProductPic() {
-        return productPic;
+    public String getProductPicture() {
+        return productPicture;
     }
 
-    public void setProductPic(String productPic) {
-        this.productPic = productPic;
+    public void setProductPicture(String productPicture) {
+        this.productPicture = productPicture;
     }
 
     public double getProductPrice() {

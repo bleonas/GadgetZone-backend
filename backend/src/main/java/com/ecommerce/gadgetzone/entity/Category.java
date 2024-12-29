@@ -23,7 +23,7 @@ public class Category {
     @Id
     @Column(name = "kategoria_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int kategoria_id;
+    private int categoryId;
 
     @Column(name = "emri_kategori")
     private String categoryName;
@@ -32,12 +32,12 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<Product> products;
 
-    public int getKategoria_id() {
-        return kategoria_id;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setKategoria_id(int kategoria_id) {
-        this.kategoria_id = kategoria_id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {
