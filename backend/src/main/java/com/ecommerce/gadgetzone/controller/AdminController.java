@@ -125,7 +125,7 @@ public class AdminController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-    @PutMapping("/add-products/{productId}")
+    @PutMapping("/edit-product/{productId}")
     public ResponseEntity<?> editProduct(@PathVariable("productId") int productId, @RequestBody ProductRequest productRequest) {
         adminService.editProduct(productId, productRequest);
         return ResponseEntity.ok("Product updated successfully");

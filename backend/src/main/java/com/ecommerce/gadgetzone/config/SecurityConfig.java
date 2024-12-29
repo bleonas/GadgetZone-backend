@@ -56,7 +56,7 @@ public class SecurityConfig {
                                 "/admin/users/{userId}",
                                 "admin/products-list/{productId}").permitAll()
                         .requestMatchers(HttpMethod.PUT,
-                                "/admin/add-products/{productId}").permitAll()
+                                "/admin/edit-product/{productId}").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",

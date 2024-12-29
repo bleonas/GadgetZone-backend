@@ -154,14 +154,20 @@ public class AdminService implements IAdminService{
         Product existingProduct = productRepository.findByProductId(productId)
                 .orElseThrow(() -> new IllegalStateException("Product not found"));
     
+            Brand brand = brandRepository.findByBrandId(productRequest.getBrand().getBrandId())
+                .orElseThrow(() -> new IllegalStateException("Brand not found"));
+    
+            Category category = categoryRepository.findByCategoryId(productRequest.getCategory().getCategoryId())
+                .orElseThrow(() -> new IllegalStateException("Category not found"));
+
         existingProduct.setProductName(productRequest.getProductName());
         existingProduct.setProductDescription(productRequest.getProductDescription());
         existingProduct.setProductPicture(productRequest.getProductPicture());
         existingProduct.setProductPrice(productRequest.getProductPrice());
         existingProduct.setStatus(productRequest.getStatus());
-        existingProduct.setBrand(productRequest.getBrand());
-        existingProduct.setCategory(productRequest.getCategory());
-    
+        existingProduct.setBrand(brand);
+        existingProduct.setCategory(category);
+        existingProduct.setStatus(productRequest.getStatus());
         productRepository.save(existingProduct);
     }
 
