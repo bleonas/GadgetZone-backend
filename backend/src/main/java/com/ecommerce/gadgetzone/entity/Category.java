@@ -4,6 +4,7 @@ package com.ecommerce.gadgetzone.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @Table(name = "kategoria")
 @NoArgsConstructor
 @AllArgsConstructor

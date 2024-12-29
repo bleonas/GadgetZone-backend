@@ -39,7 +39,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/user/signup",
                                 "/user/login", 
-                                "/user/logout").permitAll()
+                                "/user/logout",
+                                "/admin/create-admin",
+                                "/admin/brand",
+                                "/admin/category",
+                                "/admin/warehouse").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/user/profile").permitAll()
                         .requestMatchers(
