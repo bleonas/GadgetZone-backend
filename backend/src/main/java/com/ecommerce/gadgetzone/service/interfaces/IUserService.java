@@ -1,5 +1,7 @@
 package com.ecommerce.gadgetzone.service.interfaces;
 
+import java.util.List;
+
 import com.ecommerce.gadgetzone.dto.request.UserLogInRequest;
 import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
 import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
@@ -16,4 +18,7 @@ public interface IUserService {
 
     void logout(HttpServletRequest request);
     
+    List<UserLogInResponse> getAllUsers();
+
+    void deleteUserById(int userId);
 }

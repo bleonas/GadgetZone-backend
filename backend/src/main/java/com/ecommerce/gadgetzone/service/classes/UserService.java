@@ -13,7 +13,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.ecommerce.gadgetzone.enums.Role;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +72,7 @@ public class UserService implements IUserService{
 
         String jwtToken = jwtService.generateToken(user);
 
-        return new UserLogInResponse(user.getEmail(), user.getUser_id(), user.getFirstName(), user.getLastName(), user.getRole().name(), jwtToken);
+        return new UserLogInResponse(user.getEmail(), user.getUserId(), user.getFirstName(), user.getLastName(), user.getRole().name(), jwtToken);
     }
 
     public User getAuthenticatedUser() {
@@ -86,7 +88,7 @@ public class UserService implements IUserService{
 
         UserLogInResponse userProfileResponse = new UserLogInResponse(
                 authenticatedUser.getEmail(),
-                authenticatedUser.getUser_id(),
+                authenticatedUser.getUserId(),
                 authenticatedUser.getFirstName(),
                 authenticatedUser.getLastName(),
                 role,
@@ -106,6 +108,25 @@ public class UserService implements IUserService{
         String token = authorizationHeader.substring(7);
 
         jwtService.addToBlacklist(token);
+    }
+
+    public List<UserLogInResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                    .map(user -> UserLogInResponse.builder()
+                        .userId(user.getUserId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .role(user.getRole().name())
+                        .build())
+                    .collect(Collectors.toList());
+    }
+
+    public void deleteUserById(int userId) {
+        User user = userRepository.findByUserId(userId)
+                                  .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        userRepository.delete(user);
     }
 }
 

@@ -29,7 +29,7 @@ public class User implements UserDetails{
     @Id
     @Column(name = "perdorues_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int user_id;
+    private  int userId;
 
     @Column(name = "password")
     private String password;
@@ -56,12 +56,12 @@ public class User implements UserDetails{
     private List<Payment> payments;
 
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
 

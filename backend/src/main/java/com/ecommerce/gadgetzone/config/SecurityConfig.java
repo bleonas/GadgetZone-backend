@@ -47,7 +47,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/user/profile",
                                 "/admin/brand",
-                                "/admin/category").permitAll()
+                                "/admin/category",
+                                "/admin/users").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/admin/users/{userId}").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
