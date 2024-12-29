@@ -1,6 +1,8 @@
 package com.ecommerce.gadgetzone.service.classes;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import com.ecommerce.gadgetzone.dto.request.BrandRequest;
 import com.ecommerce.gadgetzone.dto.request.CategoryRequest;
 import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
 import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
+import com.ecommerce.gadgetzone.dto.response.BrandResponse;
+import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
 import com.ecommerce.gadgetzone.entity.Brand;
 import com.ecommerce.gadgetzone.entity.Category;
 import com.ecommerce.gadgetzone.entity.User;
@@ -87,6 +91,22 @@ public class AdminService implements IAdminService{
                 .build();
 
             warehouseRepository.save(newWarehouse);
+    }
+
+    public List<BrandResponse> getAllBrands() {
+        return brandRepository.findAll().stream()
+                .map(brand -> BrandResponse.builder()
+                        .brandName(brand.getNameBrand())
+                        .build())
+                .collect(Collectors.toList()); 
+    }
+
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(category -> CategoryResponse.builder()
+                        .categoryName(category.getCategoryName())
+                        .build())
+                .collect(Collectors.toList()); 
     }
 
 }

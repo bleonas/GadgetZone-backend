@@ -45,7 +45,9 @@ public class SecurityConfig {
                                 "/admin/category",
                                 "/admin/warehouse").permitAll()
                         .requestMatchers(HttpMethod.GET,
-                                "/user/profile").permitAll()
+                                "/user/profile",
+                                "/admin/brand",
+                                "/admin/category").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
