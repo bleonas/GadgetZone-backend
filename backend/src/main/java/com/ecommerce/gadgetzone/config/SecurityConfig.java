@@ -50,8 +50,9 @@ public class SecurityConfig {
                                 "/admin/brand",
                                 "/admin/category",
                                 "/admin/users",
-                                "admin/add-products/{productId}",
-                                "admin/products-list").permitAll()
+                                "/admin/add-products/{productId}",
+                                "/admin/products-list",
+                                "/products").permitAll()
                         .requestMatchers(HttpMethod.DELETE,
                                 "/admin/users/{userId}",
                                 "admin/products-list/{productId}").permitAll()
