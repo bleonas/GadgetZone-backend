@@ -11,6 +11,7 @@ import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
 import com.ecommerce.gadgetzone.dto.response.ProductResponse;
 import com.ecommerce.gadgetzone.entity.Product;
+import org.springframework.http.ResponseEntity;
 
 public interface IAdminService {
 
@@ -26,7 +27,7 @@ public interface IAdminService {
 
     List<CategoryResponse> getAllCategories();
 
-    void addProduct(ProductRequest addProductRequest);
+    ResponseEntity<?> addProduct(ProductRequest addProductRequest);
     
     Product getProductById(int productId);
 

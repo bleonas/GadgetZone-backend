@@ -1,9 +1,13 @@
 package com.ecommerce.gadgetzone.service.classes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.ecommerce.gadgetzone.service.interfaces.IImageService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +51,10 @@ public class AdminService implements IAdminService{
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final WarehouseRepository warehouseRepository;
+    private final IImageService imageService;
 
+
+    @Transactional
     public void registerAdmin(UserSignUpRequest userSignUpRequest) {
         Optional<User> existingUser = userRepository.findByEmail(userSignUpRequest.getEmail());
         if (existingUser.isPresent()) {
@@ -64,6 +71,7 @@ public class AdminService implements IAdminService{
         userRepository.save(admin);
     }
 
+    @Transactional
     public void addCategory(CategoryRequest addCategoryRequest) {
         Optional<Category> existingCategory = categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName());
         if (existingCategory.isPresent()) {
@@ -77,6 +85,7 @@ public class AdminService implements IAdminService{
             categoryRepository.save(newCategory);
     }
 
+    @Transactional
     public void addBrand(BrandRequest addBrandRequest) {
         Optional<Brand> existingBrand = brandRepository.findByNameBrand(addBrandRequest.getBrandName());
         if (existingBrand.isPresent()) {
@@ -90,6 +99,7 @@ public class AdminService implements IAdminService{
             brandRepository.save(newBrand);
     }
 
+    @Transactional
     public void addWarehouse(WarehouseRequest addWarehouseRequest) {
         Optional<Warehouse> existingWarehouse = warehouseRepository.findByWarehouseName(addWarehouseRequest.getWarehouseName());
         if (existingWarehouse.isPresent()) {
@@ -121,10 +131,11 @@ public class AdminService implements IAdminService{
                 .collect(Collectors.toList()); 
     }
 
-    public void addProduct(ProductRequest addProductRequest) {
+    @Transactional
+    public ResponseEntity<?> addProduct(ProductRequest addProductRequest) {
         Optional<Product> existingProduct = productRepository.findByProductName(addProductRequest.getProductName());
         if (existingProduct.isPresent()) {
-            throw new IllegalStateException("Product already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Product already exists");
         }
 
         Brand brand = brandRepository.findByBrandId(addProductRequest.getBrand().getBrandId())
@@ -136,20 +147,37 @@ public class AdminService implements IAdminService{
         Product newProduct = Product.builder()
             .productName(addProductRequest.getProductName())
             .productDescription(addProductRequest.getProductDescription())
-            .productPicture(addProductRequest.getProductPicture())
             .productPrice(addProductRequest.getProductPrice())
             .brand(brand)
             .category(category)
             .status(addProductRequest.getStatus())
             .build();
 
+
+        if(addProductRequest.getProductPicture() != null){
+            File path = new File("src/main/resources/static/img/products");
+
+            String imageName = newProduct.getProductName();
+
+            try {
+                String newProfilePhotoPath = imageService.saveImage(path, addProductRequest.getProductPicture(), imageName);
+                newProduct.setProductPicture(newProfilePhotoPath);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ruajtja e produktit deshtoi!");
+            }
+        }
         productRepository.save(newProduct);
+        return ResponseEntity.status(HttpStatus.OK).body("Produkti u shtua me sukses!");
     }
+
+
 
     public Product getProductById(int productId) {
         return productRepository.findById(productId).orElse(null);
     }
 
+
+    @Transactional
     public void editProduct(int productId, ProductRequest productRequest) {
         Product existingProduct = productRepository.findByProductId(productId)
                 .orElseThrow(() -> new IllegalStateException("Product not found"));
@@ -162,7 +190,6 @@ public class AdminService implements IAdminService{
 
         existingProduct.setProductName(productRequest.getProductName());
         existingProduct.setProductDescription(productRequest.getProductDescription());
-        existingProduct.setProductPicture(productRequest.getProductPicture());
         existingProduct.setProductPrice(productRequest.getProductPrice());
         existingProduct.setStatus(productRequest.getStatus());
         existingProduct.setBrand(brand);
