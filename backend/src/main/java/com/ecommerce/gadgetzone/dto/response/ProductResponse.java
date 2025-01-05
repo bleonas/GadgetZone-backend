@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class ProductResponse {
     private int productId;
     private String productName;
     private String productDescription;
-    private String productPicture;
+    private MultipartFile productPicture;
     private double productPrice;
     private Brand brand;
     private Category category;
