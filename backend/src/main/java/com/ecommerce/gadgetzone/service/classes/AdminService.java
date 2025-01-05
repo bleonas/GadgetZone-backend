@@ -139,36 +139,36 @@ public class AdminService implements IAdminService{
         }
 
         Brand brand = brandRepository.findByBrandId(addProductRequest.getBrand().getBrandId())
-            .orElseThrow(() -> new IllegalStateException("Brand not found"));
+                .orElseThrow(() -> new IllegalStateException("Brand not found"));
 
         Category category = categoryRepository.findByCategoryId(addProductRequest.getCategory().getCategoryId())
-            .orElseThrow(() -> new IllegalStateException("Category not found"));
+                .orElseThrow(() -> new IllegalStateException("Category not found"));
 
         Product newProduct = Product.builder()
-            .productName(addProductRequest.getProductName())
-            .productDescription(addProductRequest.getProductDescription())
-            .productPrice(addProductRequest.getProductPrice())
-            .brand(brand)
-            .category(category)
-            .status(addProductRequest.getStatus())
-            .build();
+                .productName(addProductRequest.getProductName())
+                .productDescription(addProductRequest.getProductDescription())
+                .productPrice(addProductRequest.getProductPrice())
+                .brand(brand)
+                .category(category)
+                .status(addProductRequest.getStatus())
+                .build();
 
-
-        if(addProductRequest.getProductPicture() != null){
+        if (addProductRequest.getProductPicture() != null && !addProductRequest.getProductPicture().isEmpty()) {
             File path = new File("src/main/resources/static/img/products");
-
             String imageName = newProduct.getProductName();
 
             try {
-                String newProfilePhotoPath = imageService.saveImage(path, addProductRequest.getProductPicture(), imageName);
-                newProduct.setProductPicture(newProfilePhotoPath);
+                String savedImagePath = imageService.saveImage(path, addProductRequest.getProductPicture(), imageName);
+                newProduct.setProductPicture("/static/img/products/" + savedImagePath);
             } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ruajtja e produktit deshtoi!");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save product image");
             }
         }
+
         productRepository.save(newProduct);
-        return ResponseEntity.status(HttpStatus.OK).body("Produkti u shtua me sukses!");
+        return ResponseEntity.ok("Product added successfully");
     }
+
 
 
 

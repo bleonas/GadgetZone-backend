@@ -28,6 +28,10 @@ public class Category {
     @Column(name = "emri_kategori")
     private String categoryName;
 
+    public Category(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "category", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<Product> products;

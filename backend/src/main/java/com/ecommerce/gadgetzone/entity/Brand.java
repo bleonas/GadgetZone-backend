@@ -32,6 +32,10 @@ public class Brand {
     @OneToMany(mappedBy = "brand", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<Product> products;
 
+    public Brand(int brandId) {
+        this.brandId = brandId;
+    }
+
     public int getBrandId() {
         return brandId;
     }
@@ -47,4 +51,5 @@ public class Brand {
     public void setNameBrand(String nameBrand) {
         this.nameBrand = nameBrand;
     }
+
 }

@@ -2,17 +2,11 @@ package com.ecommerce.gadgetzone.controller;
 
 import java.util.List;
 
+import com.ecommerce.gadgetzone.enums.ProductStatus;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ecommerce.gadgetzone.config.JwtService;
 import com.ecommerce.gadgetzone.dto.request.BrandRequest;
@@ -33,6 +27,7 @@ import com.ecommerce.gadgetzone.service.interfaces.IUserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/admin")
@@ -108,11 +103,31 @@ public class AdminController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-    @PostMapping("/add-product")
-    public ResponseEntity<?> addProduct(@RequestBody ProductRequest addProductRequest) {
-        adminService.addProduct(addProductRequest);
-        return ResponseEntity.ok("Product Added Successfully");
+    @PostMapping(value = "/add-product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addProduct(
+            @RequestParam("productId") int productId,
+            @RequestParam("productName") String productName,
+            @RequestParam("productDescription") String productDescription,
+            @RequestParam("productPrice") double productPrice,
+            @RequestParam(value = "productPicture", required = false) MultipartFile productPicture,
+            @RequestParam("brandId") int brandId,
+            @RequestParam("categoryId") int categoryId,
+            @RequestParam("status") ProductStatus status
+    ) {
+        ProductRequest productRequest = ProductRequest.builder()
+                .productId(productId)
+                .productName(productName)
+                .productDescription(productDescription)
+                .productPrice(productPrice)
+                .productPicture(productPicture)
+                .brand(new Brand(brandId))  // Assuming constructor exists
+                .category(new Category(categoryId))  // Assuming constructor exists
+                .status(status)
+                .build();
+
+        return adminService.addProduct(productRequest);
     }
+
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @GetMapping("/add-products/{productId}")
