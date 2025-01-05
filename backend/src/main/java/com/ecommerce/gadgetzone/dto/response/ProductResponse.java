@@ -18,7 +18,7 @@ public class ProductResponse {
     private int productId;
     private String productName;
     private String productDescription;
-    private MultipartFile productPicture;
+    private String productPicture;
     private double productPrice;
     private Brand brand;
     private Category category;
