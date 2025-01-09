@@ -14,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 @ToString
 public class ProductRequest {
-    private int productId;
+    private Integer productId;
     private String productName;
     private String productDescription;
-    private MultipartFile productPicture;
+    private MultipartFile[] productPictures;
     private double productPrice;
     private Brand brand;
     private Category category;

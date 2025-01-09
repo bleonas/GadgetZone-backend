@@ -1,5 +1,6 @@
 package com.ecommerce.gadgetzone.service.interfaces;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.ecommerce.gadgetzone.dto.request.BrandRequest;
@@ -27,7 +28,7 @@ public interface IAdminService {
 
     List<CategoryResponse> getAllCategories();
 
-    ResponseEntity<?> addProduct(ProductRequest addProductRequest);
+    void addProduct(ProductRequest addProductRequest) throws IOException;
     
     Product getProductById(int productId);
 

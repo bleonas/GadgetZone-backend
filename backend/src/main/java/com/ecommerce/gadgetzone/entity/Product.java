@@ -33,6 +33,7 @@ public class Product {
     @Column(name = "pershkrimi_produktit")
     private String productDescription;
 
+    @Lob
     @Column(name = "foto_produktit")
     private String productPicture;
 

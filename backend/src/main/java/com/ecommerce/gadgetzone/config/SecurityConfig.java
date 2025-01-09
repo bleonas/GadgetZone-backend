@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/products").permitAll()
                         .requestMatchers(HttpMethod.DELETE,
                                 "/admin/users/{userId}",
-                                "admin/products-list/{productId}").permitAll()
+                                "/admin/products-list/{productId}").permitAll()
                         .requestMatchers(HttpMethod.PUT,
                                 "/admin/edit-product/{productId}").permitAll()
                         .requestMatchers(
