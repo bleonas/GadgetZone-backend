@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,8 +57,10 @@ public class AdminService implements IAdminService{
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final WarehouseRepository warehouseRepository;
-    private final String UPLOAD_DIR ="/GadgetZone-Backend/backend/src/main/resources/static/images";
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${file.upload-dir}")
+    private String UPLOAD_DIR;
 
 
     public void registerAdmin(UserSignUpRequest userSignUpRequest) {
