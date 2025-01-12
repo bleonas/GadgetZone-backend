@@ -44,7 +44,8 @@ public class SecurityConfig {
                                 "/admin/brand",
                                 "/admin/category",
                                 "/admin/warehouse",
-                                "/admin/add-product").permitAll()
+                                "/admin/add-product",
+                                "/cart/add-to-cart").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/user/profile",
                                 "/admin/brand",
@@ -53,12 +54,15 @@ public class SecurityConfig {
                                 "/admin/add-products/{productId}",
                                 "/admin/products-list",
                                 "/products",
-                                "/src/main/resources/static/images/**").permitAll()
+                                "/src/main/resources/static/images/**",
+                                "/cart/{userId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE,
                                 "/admin/users/{userId}",
-                                "/admin/products-list/{productId}").permitAll()
+                                "/admin/products-list/{productId}",
+                                "/cart/{userId}/{productId}").permitAll()
                         .requestMatchers(HttpMethod.PUT,
-                                "/admin/edit-product/{productId}").permitAll()
+                                "/admin/edit-product/{productId}",
+                                "/cart/{userId}").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",

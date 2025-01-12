@@ -30,6 +30,11 @@ public class ShoppingCart {
     private int sessionId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToOne
+    @JoinColumn(name = "perdorues_id")
+    private User user;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "shoppingCart", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ShoppingCartDetails> shoppingCartDetails;
 
