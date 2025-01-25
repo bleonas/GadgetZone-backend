@@ -106,7 +106,7 @@ public class AdminService implements IAdminService{
     }
 
     public void addWarehouse(WarehouseRequest addWarehouseRequest) {
-        Optional<Warehouse> existingWarehouse = warehouseRepository.findByWarehouseName(addWarehouseRequest.getWarehouseName());
+        Optional<Warehouse> existingWarehouse = Optional.ofNullable(warehouseRepository.findByWarehouseName(addWarehouseRequest.getWarehouseName()));
         if (existingWarehouse.isPresent()) {
             throw new IllegalStateException("Warehouse already exists");
         }

@@ -3,6 +3,9 @@ package com.ecommerce.gadgetzone.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.ecommerce.gadgetzone.dto.request.*;
+import com.ecommerce.gadgetzone.entity.*;
+import com.ecommerce.gadgetzone.service.interfaces.IWarehouseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,19 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.gadgetzone.config.JwtService;
-import com.ecommerce.gadgetzone.dto.request.BrandRequest;
-import com.ecommerce.gadgetzone.dto.request.CategoryRequest;
-import com.ecommerce.gadgetzone.dto.request.ProductRequest;
-import com.ecommerce.gadgetzone.dto.request.UserSignUpRequest;
-import com.ecommerce.gadgetzone.dto.request.WarehouseRequest;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
 import com.ecommerce.gadgetzone.dto.response.ProductResponse;
 import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
-import com.ecommerce.gadgetzone.entity.Brand;
-import com.ecommerce.gadgetzone.entity.Category;
-import com.ecommerce.gadgetzone.entity.Product;
-import com.ecommerce.gadgetzone.entity.Warehouse;
 import com.ecommerce.gadgetzone.service.interfaces.IAdminService;
 import com.ecommerce.gadgetzone.service.interfaces.IUserService;
 
@@ -43,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
     private final IAdminService adminService;
     private final IUserService userService;
+    private final IWarehouseService warehouseService;
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") 
     @PostMapping("/create-admin")
@@ -159,6 +154,13 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error deleting product: " + e.getMessage());
         }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @PutMapping("/add-product-amount/{productId}")
+    public ResponseEntity<?> editProductAmount(@RequestBody WarehouseDetailsRequest warehouseRequest){
+        warehouseService.updateProductAmount(warehouseRequest);
+        return ResponseEntity.ok("Product amount updated successfully!");
     }
 
 

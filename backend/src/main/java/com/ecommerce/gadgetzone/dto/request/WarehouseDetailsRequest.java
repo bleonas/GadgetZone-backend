@@ -1,5 +1,6 @@
 package com.ecommerce.gadgetzone.dto.request;
 
+
 import lombok.*;
 
 @Data
@@ -8,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequest {
-    private String categoryName;
-
+public class WarehouseDetailsRequest {
+    private int productId;
+    private int amount;
 }
