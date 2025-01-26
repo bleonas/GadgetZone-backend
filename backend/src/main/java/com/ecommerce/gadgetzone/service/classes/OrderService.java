@@ -4,6 +4,7 @@ import com.ecommerce.gadgetzone.dto.request.OrderDetailRequest;
 import com.ecommerce.gadgetzone.dto.request.OrderRequest;
 import com.ecommerce.gadgetzone.dto.response.OrderDetailsResponse;
 import com.ecommerce.gadgetzone.dto.response.OrderResponse;
+import com.ecommerce.gadgetzone.dto.response.AllOrdersResponse;
 import com.ecommerce.gadgetzone.entity.*;
 import com.ecommerce.gadgetzone.repository.OrderDetailsRepository;
 import com.ecommerce.gadgetzone.repository.OrderRepository;
@@ -102,6 +103,32 @@ public class OrderService implements IOrderService {
         }
 
         orderRepository.delete(order);
+    }
+    
+    public List<AllOrdersResponse> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+
+        return orders.stream().map(order -> {
+            AllOrdersResponse.OrderUser user = new AllOrdersResponse.OrderUser(
+                    order.getUser().getFirstName() + " " + order.getUser().getLastName(),
+                    order.getUser().getRole().name().toLowerCase()
+            );
+
+            List<AllOrdersResponse.OrderProduct> products = order.getOrderDetails().stream()
+                    .map(orderDetail -> new AllOrdersResponse.OrderProduct(
+                            "product" + orderDetail.getProduct().getProductId(), 
+                            orderDetail.getProduct().getProductName(),
+                            orderDetail.getOrderAmount()
+                    ))
+                    .collect(Collectors.toList());
+
+            return new AllOrdersResponse(
+                    "orderId" + order.getOrderId(), 
+                    user,
+                    products,
+                    order.getTotalPrice()
+            );
+        }).collect(Collectors.toList());
     }
 
 }

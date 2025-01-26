@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/products",
                                 "/src/main/resources/static/images/**",
                                 "/orders/{userId}",
-                                "/cart/{userId}").permitAll()
+                                "/cart/{userId}",
+                                "/admin/orders").permitAll()
                         .requestMatchers(HttpMethod.DELETE,
                                 "/admin/users/{userId}",
                                 "/admin/products-list/{productId}",

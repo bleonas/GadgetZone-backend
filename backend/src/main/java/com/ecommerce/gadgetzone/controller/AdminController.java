@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.gadgetzone.config.JwtService;
 import com.ecommerce.gadgetzone.dto.response.BrandResponse;
 import com.ecommerce.gadgetzone.dto.response.CategoryResponse;
+import com.ecommerce.gadgetzone.dto.response.AllOrdersResponse;
 import com.ecommerce.gadgetzone.dto.response.ProductResponse;
 import com.ecommerce.gadgetzone.dto.response.UserLogInResponse;
 import com.ecommerce.gadgetzone.service.interfaces.IAdminService;
+import com.ecommerce.gadgetzone.service.interfaces.IOrderService;
 import com.ecommerce.gadgetzone.service.interfaces.IUserService;
 
 import jakarta.validation.Valid;
@@ -38,7 +40,8 @@ public class AdminController {
     private final IAdminService adminService;
     private final IUserService userService;
     private final IWarehouseService warehouseService;
-
+    private final IOrderService orderService;
+    
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") 
     @PostMapping("/create-admin")
     public ResponseEntity<?> createAdmin(@RequestBody UserSignUpRequest createAdminRequest) {
@@ -163,5 +166,10 @@ public class AdminController {
         return ResponseEntity.ok("Product amount updated successfully!");
     }
 
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @GetMapping("/orders")
+    public List<AllOrdersResponse> getAllOrders() {
+        return orderService.getAllOrders();
+    }
 
 }
