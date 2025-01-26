@@ -23,7 +23,7 @@ public class WarehouseService implements IWarehouseService {
     public void updateProductAmount(WarehouseDetailsRequest warehouseRequest) {
         Warehouse warehouse = warehouseRepository.findByWarehouseName("Gadget Zone");
 
-        Product product = productRepository.findById(warehouseRequest.getProductId())
+        Product product = productRepository.findByProductId(warehouseRequest.getProductId())
                 .orElseThrow(() -> new IllegalStateException("Product not found"));
 
         int amount = warehouseRequest.getAmount();
