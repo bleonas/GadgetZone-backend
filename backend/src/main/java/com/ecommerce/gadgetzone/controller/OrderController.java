@@ -2,6 +2,7 @@ package com.ecommerce.gadgetzone.controller;
 
 import com.ecommerce.gadgetzone.dto.request.OrderRequest;
 import com.ecommerce.gadgetzone.dto.response.OrderResponse;
+import com.ecommerce.gadgetzone.entity.Order;
 import com.ecommerce.gadgetzone.service.interfaces.IOrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,18 @@ public class OrderController {
                     .body("Error deleting orders: " + e.getMessage());
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @GetMapping("/pay/{orderId}")
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable int orderId) {
+        OrderResponse orderDetails = orderService.getOrderById(orderId);
+        
+        if (orderDetails == null) {
+            return ResponseEntity.status(404).body(null);  // If order not found
+        }
+
+        return ResponseEntity.ok(orderDetails);  // Return the order if found
+    }
+
 
 }

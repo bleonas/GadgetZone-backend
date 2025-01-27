@@ -69,6 +69,7 @@ public class OrderService implements IOrderService {
 
         return orders.stream().map(order -> {
             OrderResponse orderResponse = new OrderResponse();
+            orderResponse.setUserId(user.getUserId());
             orderResponse.setOrderId((order.getOrderId()));
             orderResponse.setTotalPrice(order.getTotalPrice());
 
@@ -130,6 +131,44 @@ public class OrderService implements IOrderService {
             );
         }).collect(Collectors.toList());
     }
+
+    public OrderResponse getOrderById(int orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isPresent()) {
+            Order orderEntity = order.get();
+            User user = orderEntity.getUser();
+            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrder(orderEntity);
+            
+            // Map order details to response
+            List<OrderDetailsResponse> orderDetailsResponse = orderDetails.stream()
+                .map(orderDetail -> {
+                    OrderDetailsResponse response = new OrderDetailsResponse();
+                    response.setProductName(orderDetail.getProduct().getProductName());
+                    response.setAmount(orderDetail.getOrderAmount());
+                    return response;  // Fixed missing semicolon
+                })
+                .collect(Collectors.toList());
+            
+            // Create the order response
+            OrderResponse orderResponse = new OrderResponse();
+            orderResponse.setUserId(user.getUserId());
+            orderResponse.setOrderId(orderEntity.getOrderId());
+            orderResponse.setTotalPrice(orderEntity.getTotalPrice());
+            orderResponse.setOrderItems(orderDetailsResponse);
+            
+            // Return the order response
+            return orderResponse;
+        }
+        
+        // Handle case when order is not found
+        // Option 1: Return null (if acceptable in your use case)
+        return null;
+    
+        // Option 2: Throw an exception if order is not found
+        // throw new OrderNotFoundException("Order with ID " + orderId + " not found.");
+    }
+    
+
 
 }
 

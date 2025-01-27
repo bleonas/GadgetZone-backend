@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderResponse {
+    private int userId;
     private int orderId;
     private List<OrderDetailsResponse> orderItems;
     private double totalPrice;

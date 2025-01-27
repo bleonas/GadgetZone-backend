@@ -17,8 +17,10 @@ import com.stripe.param.PaymentIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Service
+@CrossOrigin
 @RequiredArgsConstructor
 public class PaymentService implements IPaymentService {
 
@@ -44,8 +46,8 @@ public class PaymentService implements IPaymentService {
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                 .setCurrency(request.getCurrency())
                 .setAmount((long) order.getTotalPrice())
-                .putMetadata("order_id", String.valueOf(order.getOrderId()))
-                .putMetadata("user_id", String.valueOf(user.getUserId()))
+                .putMetadata("orderId", String.valueOf(order.getOrderId()))
+                .putMetadata("userId", String.valueOf(user.getUserId()))
                 .build();
 
         PaymentIntent paymentIntent = PaymentIntent.create(params);

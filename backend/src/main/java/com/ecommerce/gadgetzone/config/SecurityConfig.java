@@ -58,6 +58,7 @@ public class SecurityConfig {
                                 "/products",
                                 "/src/main/resources/static/images/**",
                                 "/orders/{userId}",
+                                "/orders/pay/{orderId}",
                                 "/cart/{userId}",
                                 "/admin/orders").permitAll()
                         .requestMatchers(HttpMethod.DELETE,

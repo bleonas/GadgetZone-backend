@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Product {
     private double productPrice;
 
     @Column(name = "data")
-    private Date date;
+    private LocalDateTime date;
 
     @Column(name = "statusi")
     @Enumerated(EnumType.STRING)
@@ -109,11 +110,11 @@ public class Product {
         this.productPrice = productPrice;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
