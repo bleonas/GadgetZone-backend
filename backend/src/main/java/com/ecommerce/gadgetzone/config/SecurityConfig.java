@@ -46,6 +46,7 @@ public class SecurityConfig {
                                 "/admin/warehouse",
                                 "/admin/add-product",
                                 "/cart/add-to-cart",
+                                "/payment/add",
                                 "/orders/{userId}").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/user/profile",
